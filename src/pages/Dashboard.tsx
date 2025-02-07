@@ -4,6 +4,7 @@ import { HomeDetails } from "@/components/dashboard/HomeDetails";
 import { RecurringMaintenance } from "@/components/dashboard/RecurringMaintenance";
 import { ActiveProjects } from "@/components/dashboard/ActiveProjects";
 import { CompletedProjects } from "@/components/dashboard/CompletedProjects";
+import { HomePhotos } from "@/components/dashboard/HomePhotos";
 
 const Dashboard = () => {
   return (
@@ -26,9 +27,12 @@ const Dashboard = () => {
       </div>
 
       {/* Row C */}
-      <div className="mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Completed Projects */}
         <CompletedProjects />
+        
+        {/* Home Photos */}
+        <HomePhotos />
       </div>
     </div>
   );
