@@ -42,6 +42,53 @@ export type Database = {
         }
         Relationships: []
       }
+      project_instances: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["project_status"]
+          template_id: string
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          template_id: string
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          template_id?: string
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_instances_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "project_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_templates: {
         Row: {
           category: string | null
@@ -83,6 +130,48 @@ export type Database = {
           visibility?: Database["public"]["Enums"]["visibility_status"]
         }
         Relationships: []
+      }
+      template_tools_and_materials: {
+        Row: {
+          created_at: string | null
+          item_id: string
+          quantity: number
+          required: boolean | null
+          template_id: string
+          unit: string
+        }
+        Insert: {
+          created_at?: string | null
+          item_id: string
+          quantity: number
+          required?: boolean | null
+          template_id: string
+          unit: string
+        }
+        Update: {
+          created_at?: string | null
+          item_id?: string
+          quantity?: number
+          required?: boolean | null
+          template_id?: string
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "template_tools_and_materials_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "tools_and_materials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "template_tools_and_materials_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "project_templates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tools_and_materials: {
         Row: {
