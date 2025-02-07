@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { HomeDetails } from "@/components/dashboard/HomeDetails";
 import { RecurringMaintenance } from "@/components/dashboard/RecurringMaintenance";
 import { ActiveProjects } from "@/components/dashboard/ActiveProjects";
+import { CompletedProjects } from "@/components/dashboard/CompletedProjects";
 
 const Dashboard = () => {
   return (
@@ -22,6 +23,12 @@ const Dashboard = () => {
       <div className="mb-6">
         {/* Active Projects */}
         <ActiveProjects />
+      </div>
+
+      {/* Row C */}
+      <div className="mb-6">
+        {/* Completed Projects */}
+        <CompletedProjects />
       </div>
     </div>
   );
