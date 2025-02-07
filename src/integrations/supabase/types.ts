@@ -89,6 +89,50 @@ export type Database = {
           },
         ]
       }
+      project_media: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          instance_id: string
+          order_index: number
+          title: string | null
+          type: Database["public"]["Enums"]["media_type"]
+          url: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          instance_id: string
+          order_index: number
+          title?: string | null
+          type: Database["public"]["Enums"]["media_type"]
+          url: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          instance_id?: string
+          order_index?: number
+          title?: string | null
+          type?: Database["public"]["Enums"]["media_type"]
+          url?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_media_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "project_instances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_templates: {
         Row: {
           category: string | null
@@ -128,6 +172,33 @@ export type Database = {
           updated_at?: string | null
           version?: number | null
           visibility?: Database["public"]["Enums"]["visibility_status"]
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          order_index: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order_index: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order_index?: number
+          title?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -199,6 +270,50 @@ export type Database = {
           unit?: string | null
         }
         Relationships: []
+      }
+      user_instance_tasks: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          instance_id: string
+          order_index: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          instance_id: string
+          order_index: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          instance_id?: string
+          order_index?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_instance_tasks_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "project_instances"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
