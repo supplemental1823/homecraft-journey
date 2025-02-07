@@ -2,6 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { HomeDetails } from "@/components/dashboard/HomeDetails";
 import { RecurringMaintenance } from "@/components/dashboard/RecurringMaintenance";
+import { ActiveProjects } from "@/components/dashboard/ActiveProjects";
 
 const Dashboard = () => {
   return (
@@ -15,6 +16,12 @@ const Dashboard = () => {
         
         {/* Recurring Maintenance */}
         <RecurringMaintenance />
+      </div>
+
+      {/* Row B */}
+      <div className="mb-6">
+        {/* Active Projects */}
+        <ActiveProjects />
       </div>
     </div>
   );
