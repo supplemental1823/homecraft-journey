@@ -19,6 +19,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -53,19 +56,12 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom colors for DIYblueprint
+        // Custom brand colors direct hex values for direct usage
         brand: {
-          50: "#f7f7f7",
-          100: "#e3e3e3",
-          200: "#c8c8c8",
-          300: "#a4a4a4",
-          400: "#818181",
-          500: "#666666",
-          600: "#515151",
-          700: "#434343",
-          800: "#383838",
-          900: "#313131",
-          950: "#1a1a1a",
+          primary: '#1E3A8A',    // Deep Blue
+          secondary: '#3B82F6',  // Bright Blue
+          accent: '#F59E0B',     // Gold/Orange
+          background: '#F3F4F6', // Light Gray
         },
       },
       borderRadius: {
