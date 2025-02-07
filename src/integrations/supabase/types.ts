@@ -42,6 +42,75 @@ export type Database = {
         }
         Relationships: []
       }
+      project_templates: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          difficulty: Database["public"]["Enums"]["difficulty_level"]
+          estimated_hours: number | null
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["template_status"]
+          updated_at: string | null
+          version: number | null
+          visibility: Database["public"]["Enums"]["visibility_status"]
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          difficulty: Database["public"]["Enums"]["difficulty_level"]
+          estimated_hours?: number | null
+          id?: string
+          name: string
+          status?: Database["public"]["Enums"]["template_status"]
+          updated_at?: string | null
+          version?: number | null
+          visibility?: Database["public"]["Enums"]["visibility_status"]
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          difficulty?: Database["public"]["Enums"]["difficulty_level"]
+          estimated_hours?: number | null
+          id?: string
+          name?: string
+          status?: Database["public"]["Enums"]["template_status"]
+          updated_at?: string | null
+          version?: number | null
+          visibility?: Database["public"]["Enums"]["visibility_status"]
+        }
+        Relationships: []
+      }
+      tools_and_materials: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          unit: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          unit?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          unit?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
