@@ -190,7 +190,7 @@ export function ProjectCard({
           <div className="mt-2">
             <Progress value={progress} className="h-2" />
             <p className="text-sm text-muted-foreground mt-1">
-              {progress}% Complete
+              {Math.round(progress / 10)}/{10} Tasks Complete
             </p>
           </div>
         )}
@@ -223,3 +223,4 @@ export function ProjectCard({
     </Card>
   );
 }
+
