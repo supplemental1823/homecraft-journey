@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Explore from "./pages/Explore";
 import NotFound from "./pages/NotFound";
 import ProjectDetail from "./pages/ProjectDetail";
+import ProjectInstanceDetail from "./pages/ProjectInstanceDetail";
 import SignUp from "./pages/auth/SignUp";
 import SignIn from "./pages/auth/SignIn";
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/project/:id" element={<ProjectDetail />} />
+          <Route path="/project/instance/:id" element={<ProjectInstanceDetail />} />
           <Route path="/auth/signup" element={<SignUp />} />
           <Route path="/auth/signin" element={<SignIn />} />
           <Route path="*" element={<NotFound />} />
