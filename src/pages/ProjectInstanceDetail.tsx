@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Tool } from "lucide-react";
+import { Wrench } from "lucide-react";
 
 const ProjectInstanceDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -155,7 +155,7 @@ const ProjectInstanceDetail = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Tool className="h-5 w-5" />
+                  <Wrench className="h-5 w-5" />
                   Tools & Materials
                 </CardTitle>
               </CardHeader>
@@ -193,4 +193,3 @@ const ProjectInstanceDetail = () => {
 };
 
 export default ProjectInstanceDetail;
-
