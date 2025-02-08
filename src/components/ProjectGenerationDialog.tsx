@@ -10,33 +10,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Loader2, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQueryClient } from "@tanstack/react-query";
+import { ProjectForm } from "./project/ProjectForm";
+import { ProjectPreview } from "./project/ProjectPreview";
+import { GeneratedProject } from "@/types/project";
 
 interface ProjectGenerationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-interface GeneratedProject {
-  name: string;
-  description: string;
-  tools_and_materials: string[];
-  difficulty: "beginner" | "intermediate" | "advanced";
-  estimated_hours: number;
-  category: string;
-}
-
-const capitalizeFirstLetter = (str: string) => {
-  if (!str) return "";
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
 
 export function ProjectGenerationDialog({
   open,
@@ -174,81 +159,18 @@ export function ProjectGenerationDialog({
         </DialogHeader>
 
         {!generatedProject ? (
-          // Input Step
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="prompt">Project Description</Label>
-              <Input
-                id="prompt"
-                placeholder="e.g., Install a modern kitchen backsplash"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-              />
-            </div>
-          </div>
+          <ProjectForm 
+            prompt={prompt}
+            onPromptChange={setPrompt}
+            onGenerate={generateProject}
+            isGenerating={isGenerating}
+          />
         ) : (
-          // Preview Step
-          <ScrollArea className="h-[400px] pr-4">
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-semibold mb-2">Project Title</h3>
-                <p>{generatedProject.name}</p>
-              </div>
-              
-              <div>
-                <h3 className="font-semibold mb-2">Description</h3>
-                <p className="text-sm text-muted-foreground">{generatedProject.description}</p>
-              </div>
-
-              <div className="flex gap-4">
-                <div>
-                  <h3 className="font-semibold mb-2">Difficulty</h3>
-                  <Badge
-                    variant={
-                      generatedProject.difficulty === "beginner"
-                        ? "default"
-                        : generatedProject.difficulty === "intermediate"
-                        ? "secondary"
-                        : "destructive"
-                    }
-                  >
-                    {capitalizeFirstLetter(generatedProject.difficulty)}
-                  </Badge>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Estimated Time</h3>
-                  <p>{generatedProject.estimated_hours} hours</p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Category</h3>
-                  <Badge variant="outline">{generatedProject.category}</Badge>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-2">Tools & Materials Needed</h3>
-                <ul className="list-disc pl-4 space-y-1">
-                  {generatedProject.tools_and_materials?.map((item, index) => (
-                    <li key={index} className="text-sm">{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </ScrollArea>
+          <ProjectPreview project={generatedProject} />
         )}
 
         <DialogFooter>
-          {!generatedProject ? (
-            <Button
-              onClick={generateProject}
-              disabled={isGenerating || !prompt.trim()}
-            >
-              {isGenerating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isGenerating ? "Generating..." : "Generate Project"}
-            </Button>
-          ) : (
+          {generatedProject && (
             <div className="flex gap-2">
               <Button
                 variant="outline"
