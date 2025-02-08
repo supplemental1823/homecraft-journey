@@ -25,24 +25,6 @@ export function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative h-48 overflow-hidden">
-        <img 
-          src={imageUrl} 
-          alt={title} 
-          className="w-full h-full object-cover"
-          loading="lazy"
-        />
-        <Badge 
-          className="absolute top-4 right-4"
-          variant={
-            difficulty === "beginner" ? "default" : 
-            difficulty === "intermediate" ? "secondary" : 
-            "destructive"
-          }
-        >
-          {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-        </Badge>
-      </div>
       <CardHeader className="space-y-1">
         <div className="flex justify-between items-start">
           <h3 className="text-xl font-semibold">{title}</h3>
@@ -53,11 +35,22 @@ export function ProjectCard({
             </div>
           )}
         </div>
-        {category && (
-          <Badge variant="outline" className="w-fit">
-            {category}
+        <div className="flex gap-2 flex-wrap">
+          {category && (
+            <Badge variant="outline" className="w-fit">
+              {category}
+            </Badge>
+          )}
+          <Badge 
+            variant={
+              difficulty === "beginner" ? "default" : 
+              difficulty === "intermediate" ? "secondary" : 
+              "destructive"
+            }
+          >
+            {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
           </Badge>
-        )}
+        </div>
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">
