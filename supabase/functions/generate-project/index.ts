@@ -25,7 +25,7 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, userId } = await req.json();
+    const { prompt } = await req.json();
     
     // Check rate limit
     const supabase = createClient(
@@ -57,7 +57,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4',
         messages: [
           {
             role: 'system',
@@ -82,7 +82,20 @@ serve(async (req) => {
     });
 
     const completion = await openAIResponse.json();
+    
+    if (!completion.choices?.[0]?.message?.content) {
+      throw new Error('Invalid response from OpenAI');
+    }
+
     const projectData = JSON.parse(completion.choices[0].message.content);
+
+    // Validate the response contains all required fields
+    const requiredFields = ['name', 'description', 'tools_and_materials', 'difficulty', 'estimated_hours', 'category'];
+    for (const field of requiredFields) {
+      if (!projectData[field]) {
+        throw new Error(`Missing required field: ${field}`);
+      }
+    }
 
     return new Response(
       JSON.stringify({ project: projectData }),

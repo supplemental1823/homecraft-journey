@@ -225,7 +225,7 @@ export type Database = {
           category?: string | null
           created_at?: string | null
           description?: string | null
-          difficulty: Database["public"]["Enums"]["difficulty_level"]
+          difficulty?: Database["public"]["Enums"]["difficulty_level"]
           estimated_hours?: number | null
           id?: string
           name: string
