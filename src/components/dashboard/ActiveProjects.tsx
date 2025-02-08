@@ -10,6 +10,8 @@ import { ProjectGenerationDialog } from "@/components/ProjectGenerationDialog";
 
 export const ActiveProjects = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const projectsPerPage = 4;
   
   // Fetch all active projects count
   const { data: totalCount } = useQuery({
@@ -25,9 +27,9 @@ export const ActiveProjects = () => {
     }
   });
 
-  // Fetch active projects and their tasks
+  // Fetch active projects and their tasks with pagination
   const { data: projects, isLoading } = useQuery({
-    queryKey: ['activeProjects'],
+    queryKey: ['activeProjects', page],
     queryFn: async () => {
       const { data: projectInstances, error } = await supabase
         .from('project_instances')
@@ -45,7 +47,7 @@ export const ActiveProjects = () => {
         `)
         .eq('status', 'active')
         .order('created_at', { ascending: false })
-        .limit(3);
+        .range(0, (page * projectsPerPage) - 1);
 
       if (error) throw error;
       return projectInstances;
@@ -56,6 +58,10 @@ export const ActiveProjects = () => {
     if (!tasks || tasks.length === 0) return 0;
     const completedTasks = tasks.filter(task => task.completed).length;
     return Math.round((completedTasks / tasks.length) * 100);
+  };
+
+  const handleShowMore = () => {
+    setPage(prev => prev + 1);
   };
 
   if (isLoading) {
@@ -71,6 +77,8 @@ export const ActiveProjects = () => {
       </Card>
     );
   }
+
+  const hasMoreProjects = projects && totalCount ? projects.length < totalCount : false;
 
   return (
     <Card>
@@ -89,8 +97,8 @@ export const ActiveProjects = () => {
           </Button>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <CardContent className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {projects && projects.map((project) => (
             <ProjectCard
               key={project.id}
@@ -110,6 +118,17 @@ export const ActiveProjects = () => {
             </div>
           )}
         </div>
+        
+        {hasMoreProjects && (
+          <div className="flex justify-center mt-4">
+            <Button 
+              variant="outline"
+              onClick={handleShowMore}
+            >
+              Show More
+            </Button>
+          </div>
+        )}
       </CardContent>
       <ProjectGenerationDialog
         open={dialogOpen}
