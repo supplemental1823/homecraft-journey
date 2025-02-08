@@ -113,7 +113,9 @@ const ProjectInstanceDetail = () => {
                   >
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-medium">{task.title}</h3>
+                        <h3 className="font-medium">
+                          {task.order_index}. {task.title}
+                        </h3>
                         {task.description && (
                           <p className="text-sm text-muted-foreground mt-1">
                             {task.description}
