@@ -2,10 +2,14 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { ProjectGenerationDialog } from "@/components/ProjectGenerationDialog";
+import { useState } from "react";
+import { Plus } from "lucide-react";
 
 export const Header = () => {
   const navigate = useNavigate();
   const { session } = useAuth();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleLogoClick = () => {
     if (session) {
@@ -37,25 +41,38 @@ export const Header = () => {
           </Button>
         </div>
 
-        {/* Auth Buttons */}
-        {!session && (
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/auth/signin")}
-              className="text-sm font-medium transition-colors"
-            >
-              Sign In
+        {/* Add Project Button and Auth Buttons */}
+        <div className="flex items-center gap-2">
+          {session && (
+            <Button onClick={() => setDialogOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Project
             </Button>
-            <Button
-              onClick={() => navigate("/auth/signup")}
-              className="text-sm font-medium transition-colors"
-            >
-              Sign Up
-            </Button>
-          </div>
-        )}
+          )}
+          {!session && (
+            <>
+              <Button
+                variant="ghost"
+                onClick={() => navigate("/auth/signin")}
+                className="text-sm font-medium transition-colors"
+              >
+                Sign In
+              </Button>
+              <Button
+                onClick={() => navigate("/auth/signup")}
+                className="text-sm font-medium transition-colors"
+              >
+                Sign Up
+              </Button>
+            </>
+          )}
+        </div>
       </div>
+      
+      <ProjectGenerationDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </header>
   );
 };
