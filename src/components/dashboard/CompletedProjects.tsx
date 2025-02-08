@@ -3,8 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { CheckSquare, Plus } from "lucide-react";
+import { CheckSquare } from "lucide-react";
 import { toast } from "sonner";
 
 export const CompletedProjects = () => {
@@ -20,7 +19,8 @@ export const CompletedProjects = () => {
           *,
           project_templates (
             name,
-            difficulty
+            difficulty,
+            category
           ),
           user_instance_tasks (
             id,
@@ -50,7 +50,6 @@ export const CompletedProjects = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      // Invalidate both completed and active projects queries
       queryClient.invalidateQueries({ queryKey: ['completedProjects'] });
       queryClient.invalidateQueries({ queryKey: ['activeProjects'] });
       toast.success('Project moved to active projects');
@@ -95,7 +94,8 @@ export const CompletedProjects = () => {
               title={project.title || project.project_templates?.name || 'Untitled Project'}
               description={project.description || 'No description available'}
               difficulty={project.project_templates?.difficulty || 'beginner'}
-              progress={100}
+              category={project.project_templates?.category}
+              progress={calculateProgress(project.user_instance_tasks)}
               imageUrl="/placeholder.svg"
               instanceId={project.id}
               status="completed"
@@ -107,16 +107,7 @@ export const CompletedProjects = () => {
             </div>
           )}
         </div>
-        {projects && projects.length === 2 && (
-          <div className="mt-6 text-center">
-            <Button variant="outline">
-              <Plus className="mr-2 h-4 w-4" />
-              View More Projects
-            </Button>
-          </div>
-        )}
       </CardContent>
     </Card>
   );
 };
-

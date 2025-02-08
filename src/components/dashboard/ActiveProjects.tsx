@@ -21,7 +21,8 @@ export const ActiveProjects = () => {
           *,
           project_templates (
             name,
-            difficulty
+            difficulty,
+            category
           ),
           user_instance_tasks (
             id,
@@ -77,9 +78,11 @@ export const ActiveProjects = () => {
               title={project.title || project.project_templates?.name || 'Untitled Project'}
               description={project.description || 'No description available'}
               difficulty={project.project_templates?.difficulty || 'beginner'}
+              category={project.project_templates?.category}
               progress={calculateProgress(project.user_instance_tasks)}
               imageUrl="/placeholder.svg"
-              instanceId={project.id}  // Pass the instance ID
+              instanceId={project.id}
+              status="active"
             />
           ))}
           {(!projects || projects.length === 0) && (

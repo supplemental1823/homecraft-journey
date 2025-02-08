@@ -41,7 +41,7 @@ export function ProjectCard({
   const queryClient = useQueryClient();
 
   const handleStartProject = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent card click event from firing
+    e.stopPropagation();
 
     if (!session) {
       toast({
@@ -110,6 +110,7 @@ export function ProjectCard({
     onSuccess: (newStatus) => {
       queryClient.invalidateQueries({ queryKey: ['activeProjects'] });
       queryClient.invalidateQueries({ queryKey: ['completedProjects'] });
+      queryClient.invalidateQueries({ queryKey: ['projectInstance', instanceId] });
       toast({
         title: "Success!",
         description: `Project ${newStatus === 'completed' ? 'completed' : 'made active'} successfully`,
@@ -138,6 +139,11 @@ export function ProjectCard({
     toggleProjectStatus.mutate();
   };
 
+  const difficultyVariant = 
+    difficulty === "beginner" ? "default" : 
+    difficulty === "intermediate" ? "secondary" : 
+    "destructive";
+
   return (
     <Card 
       className={`overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${
@@ -162,38 +168,16 @@ export function ProjectCard({
             </div>
           )}
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex items-center gap-2">
           {category && (
-            <Badge variant="outline" className="w-fit">
+            <Badge variant="outline">
               {category}
             </Badge>
           )}
-          <Badge 
-            variant={
-              difficulty === "beginner" ? "default" : 
-              difficulty === "intermediate" ? "secondary" : 
-              "destructive"
-            }
-          >
+          <Badge variant={difficultyVariant}>
             {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
           </Badge>
-          {status && (
-            <Badge 
-              variant={status === 'active' ? "default" : "secondary"}
-              className="ml-auto"
-            >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
-            </Badge>
-          )}
         </div>
-        {instanceId && (
-          <div className="mt-2">
-            <Progress value={progress} className="h-2" />
-            <p className="text-sm text-muted-foreground mt-1">
-              {Math.round(progress / 10)}/{10} Tasks Complete
-            </p>
-          </div>
-        )}
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">
@@ -201,6 +185,14 @@ export function ProjectCard({
             ? `${description.substring(0, 100)}...`
             : description}
         </p>
+        {instanceId && (
+          <div className="mt-4">
+            <Progress value={progress} className="h-2" />
+            <p className="text-sm text-muted-foreground mt-1">
+              {Math.round((progress || 0) / 10)}/{10} Tasks Complete
+            </p>
+          </div>
+        )}
       </CardContent>
       <CardFooter>
         {instanceId ? (
@@ -223,4 +215,3 @@ export function ProjectCard({
     </Card>
   );
 }
-
