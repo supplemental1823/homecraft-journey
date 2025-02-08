@@ -59,10 +59,10 @@ export const AllBlueprints = () => {
           projects.map((project) => (
             <ProjectCard
               key={project.id}
+              templateId={project.id}
               title={project.name}
               description={project.description || ""}
               difficulty={project.difficulty}
-              imageUrl="/placeholder.svg"
               estimatedHours={project.estimated_hours}
               category={project.category || "Uncategorized"}
             />
@@ -71,4 +71,4 @@ export const AllBlueprints = () => {
       </div>
     </div>
   );
-};
+}

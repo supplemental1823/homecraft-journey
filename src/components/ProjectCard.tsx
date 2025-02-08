@@ -1,28 +1,83 @@
 
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 interface ProjectCardProps {
   title: string;
   description: string;
   difficulty: "beginner" | "intermediate" | "advanced";
-  progress?: number;
-  imageUrl: string;
   estimatedHours?: number | null;
   category?: string;
+  templateId?: string;
 }
 
 export function ProjectCard({
   title,
   description,
   difficulty,
-  progress = 0,
-  imageUrl,
   estimatedHours,
   category,
+  templateId,
 }: ProjectCardProps) {
+  const { toast } = useToast();
+  const { session } = useAuth();
+  const navigate = useNavigate();
+
+  const handleStartProject = async () => {
+    if (!session) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to start a project",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!templateId) {
+      toast({
+        title: "Error",
+        description: "Invalid project template",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('project_instances')
+        .insert({
+          template_id: templateId,
+          user_id: session.user.id,
+          title,
+          status: 'active',
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Success!",
+        description: "Project started successfully",
+      });
+
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error starting project:', error);
+      toast({
+        title: "Error",
+        description: "Failed to start project. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <CardHeader className="space-y-1">
@@ -59,17 +114,14 @@ export function ProjectCard({
             : description}
         </p>
       </CardContent>
-      {typeof progress === "number" && (
-        <CardFooter>
-          <div className="w-full space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Progress</span>
-              <span>{progress}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-        </CardFooter>
-      )}
+      <CardFooter>
+        <Button 
+          className="w-full"
+          onClick={handleStartProject}
+        >
+          Start Project
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
