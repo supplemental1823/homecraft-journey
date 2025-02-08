@@ -62,6 +62,7 @@ export default {
           secondary: '#1E3A8A',  // Equivalent to HSL(222.2, 47.4%, 11.2%)
           accent: '#F59E0B',     // Keep existing accent color
           background: '#F3F4F6', // Keep existing background color
+          dark: '#1E40AF',       // Dark Azure
         },
       },
       borderRadius: {
@@ -97,4 +98,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-
