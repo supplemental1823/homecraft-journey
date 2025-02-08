@@ -15,6 +15,7 @@ interface ProjectCardProps {
   estimatedHours?: number | null;
   category?: string;
   templateId?: string;
+  instanceId?: string;  // Added instanceId prop
   progress?: number;
   imageUrl?: string;
 }
@@ -26,6 +27,7 @@ export function ProjectCard({
   estimatedHours,
   category,
   templateId,
+  instanceId,  // Added instanceId to props
   progress,
   imageUrl,
 }: ProjectCardProps) {
@@ -85,7 +87,12 @@ export function ProjectCard({
   };
 
   const handleCardClick = () => {
-    if (templateId) {
+    // If it's a project instance (has instanceId), navigate to the instance details
+    if (instanceId) {
+      navigate(`/project/instance/${instanceId}`);
+    } 
+    // If it's a template (has templateId), navigate to the template details
+    else if (templateId) {
       navigate(`/project/${templateId}`);
     }
   };
