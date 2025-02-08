@@ -5,6 +5,7 @@ import { RecurringMaintenance } from "@/components/dashboard/RecurringMaintenanc
 import { ActiveProjects } from "@/components/dashboard/ActiveProjects";
 import { CompletedProjects } from "@/components/dashboard/CompletedProjects";
 import { HomePhotos } from "@/components/dashboard/HomePhotos";
+import { MyTools } from "@/components/dashboard/MyTools";
 
 const Dashboard = () => {
   return (
@@ -33,6 +34,12 @@ const Dashboard = () => {
         
         {/* Home Photos */}
         <HomePhotos />
+      </div>
+
+      {/* Row D */}
+      <div className="mb-6">
+        {/* My Tools */}
+        <MyTools />
       </div>
     </div>
   );
