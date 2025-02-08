@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Explore from "./pages/Explore";
 import NotFound from "./pages/NotFound";
 import ProjectDetail from "./pages/ProjectDetail";
+import SignUp from "./pages/auth/SignUp";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/project/:id" element={<ProjectDetail />} />
+          <Route path="/auth/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </TooltipProvider>
