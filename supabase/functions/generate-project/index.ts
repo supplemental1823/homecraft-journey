@@ -71,7 +71,8 @@ serve(async (req) => {
             role: 'system',
             content: `You are a home improvement project generator. Generate a detailed project based on the user's prompt. 
             Keep descriptions concise (50-75 words max). Generate a sequential list of tasks (maximum 12) needed to complete the project.
-            Tasks should be ordered logically and represent clear, actionable steps. The response must be a valid JSON object with the following structure:
+            Tasks should be ordered logically and represent clear, actionable steps. Each task must have a title and description.
+            Tasks must be numbered sequentially starting from 1. The response must be a valid JSON object with the following structure:
             {
               "name": "Project name (3-7 words)",
               "description": "Detailed but concise project description (50-75 words)",
@@ -118,11 +119,23 @@ serve(async (req) => {
       throw new Error('Invalid tasks array: must contain between 1 and 12 tasks');
     }
 
+    // Validate task order and required fields
+    const seenOrderIndices = new Set();
     for (const task of projectData.tasks) {
-      if (!task.title || !task.description || !task.order_index) {
+      if (!task.title || !task.description || typeof task.order_index !== 'number') {
         throw new Error('Invalid task: missing required fields');
       }
+      if (task.order_index < 1 || task.order_index > projectData.tasks.length) {
+        throw new Error('Invalid task order_index: must be sequential starting from 1');
+      }
+      if (seenOrderIndices.has(task.order_index)) {
+        throw new Error('Invalid task order_index: duplicate values found');
+      }
+      seenOrderIndices.add(task.order_index);
     }
+
+    // Sort tasks by order_index to ensure they're in the correct sequence
+    projectData.tasks.sort((a, b) => a.order_index - b.order_index);
 
     return new Response(
       JSON.stringify({ project: projectData }),
