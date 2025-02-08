@@ -230,7 +230,7 @@ export function ProjectGenerationDialog({
               <div>
                 <h3 className="font-semibold mb-2">Tools & Materials Needed</h3>
                 <ul className="list-disc pl-4 space-y-1">
-                  {generatedProject.tools_and_materials.map((item, index) => (
+                  {generatedProject.tools_and_materials?.map((item, index) => (
                     <li key={index} className="text-sm">{item}</li>
                   ))}
                 </ul>
