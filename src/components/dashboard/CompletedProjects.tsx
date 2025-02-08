@@ -88,27 +88,21 @@ export const CompletedProjects = () => {
         <CheckSquare className="h-5 w-5 text-primary" />
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-6">
           {projects && projects.map((project) => (
-            <div key={project.id} className="space-y-4">
-              <ProjectCard
-                title={project.title || project.project_templates?.name || 'Untitled Project'}
-                description={project.description || 'No description available'}
-                difficulty={project.project_templates?.difficulty || 'beginner'}
-                progress={100}
-                imageUrl="/placeholder.svg"
-              />
-              <Button 
-                className="w-full"
-                onClick={() => makeActiveMutation.mutate(project.id)}
-                disabled={makeActiveMutation.isPending}
-              >
-                Make Active
-              </Button>
-            </div>
+            <ProjectCard
+              key={project.id}
+              title={project.title || project.project_templates?.name || 'Untitled Project'}
+              description={project.description || 'No description available'}
+              difficulty={project.project_templates?.difficulty || 'beginner'}
+              progress={100}
+              imageUrl="/placeholder.svg"
+              instanceId={project.id}
+              status="completed"
+            />
           ))}
           {(!projects || projects.length === 0) && (
-            <div className="col-span-full text-center text-muted-foreground">
+            <div className="text-center text-muted-foreground">
               No completed projects found
             </div>
           )}
@@ -125,3 +119,4 @@ export const CompletedProjects = () => {
     </Card>
   );
 };
+
