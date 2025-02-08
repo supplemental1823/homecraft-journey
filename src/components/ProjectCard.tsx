@@ -15,6 +15,8 @@ interface ProjectCardProps {
   estimatedHours?: number | null;
   category?: string;
   templateId?: string;
+  progress?: number;
+  imageUrl?: string;
 }
 
 export function ProjectCard({
@@ -24,6 +26,8 @@ export function ProjectCard({
   estimatedHours,
   category,
   templateId,
+  progress,
+  imageUrl,
 }: ProjectCardProps) {
   const { toast } = useToast();
   const { session } = useAuth();
@@ -105,6 +109,11 @@ export function ProjectCard({
           >
             {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
           </Badge>
+          {progress !== undefined && (
+            <Badge variant="secondary" className="ml-auto">
+              {progress}% Complete
+            </Badge>
+          )}
         </div>
       </CardHeader>
       <CardContent>
