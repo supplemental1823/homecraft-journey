@@ -25,14 +25,14 @@ serve(async (req) => {
   }
 
   try {
+    const { prompt, userId } = await req.json();
+    
+    // Check rate limit
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
-
-    const { prompt, userId } = await req.json();
     
-    // Check rate limit
     const now = Math.floor(Date.now() / 1000);
     const windowStart = now - RATE_LIMIT_WINDOW;
     
@@ -62,10 +62,10 @@ serve(async (req) => {
           {
             role: 'system',
             content: `You are a home improvement project generator. Generate a detailed project based on the user's prompt. 
-            The response must be a valid JSON object with the following structure:
+            Keep descriptions concise (50-75 words max). The response must be a valid JSON object with the following structure:
             {
               "name": "Project name (3-7 words)",
-              "description": "Detailed project description (100-200 words)",
+              "description": "Detailed but concise project description (50-75 words)",
               "tools_and_materials": ["item1", "item2", "item3"],
               "difficulty": "beginner" | "intermediate" | "advanced",
               "estimated_hours": number (1-48),
@@ -84,65 +84,8 @@ serve(async (req) => {
     const completion = await openAIResponse.json();
     const projectData = JSON.parse(completion.choices[0].message.content);
 
-    // Create project template
-    const { data: template, error: templateError } = await supabase
-      .from('project_templates')
-      .insert({
-        name: projectData.name,
-        description: projectData.description,
-        difficulty: projectData.difficulty,
-        estimated_hours: projectData.estimated_hours,
-        category: projectData.category,
-        visibility: 'private',
-        status: 'published'
-      })
-      .select()
-      .single();
-
-    if (templateError) throw templateError;
-
-    // Create project instance
-    const { data: instance, error: instanceError } = await supabase
-      .from('project_instances')
-      .insert({
-        template_id: template.id,
-        user_id: userId,
-        title: projectData.name,
-        description: projectData.description,
-        status: 'active'
-      })
-      .select()
-      .single();
-
-    if (instanceError) throw instanceError;
-
-    // Create tool entries
-    const toolPromises = projectData.tools_and_materials.map(async (item: string) => {
-      const { data: tool } = await supabase
-        .from('tools_and_materials')
-        .insert({
-          name: item,
-          user_id: userId
-        })
-        .select()
-        .single();
-
-      if (tool) {
-        await supabase
-          .from('template_tools_and_materials')
-          .insert({
-            template_id: template.id,
-            item_id: tool.id,
-            quantity: 1,
-            unit: 'piece'
-          });
-      }
-    });
-
-    await Promise.all(toolPromises);
-
     return new Response(
-      JSON.stringify({ success: true, project: instance }),
+      JSON.stringify({ project: projectData }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
