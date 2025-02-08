@@ -93,5 +93,5 @@ export function ProjectGenerationDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  </div>);
+  );
 }
