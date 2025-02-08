@@ -30,6 +30,7 @@ export const TrendingBlueprints = () => {
           trendingProjects?.map((project) => (
             <ProjectCard
               key={project.id}
+              templateId={project.id}
               title={project.name}
               description={project.description || ""}
               difficulty={project.difficulty}
