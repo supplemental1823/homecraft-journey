@@ -11,6 +11,20 @@ import { ProjectGenerationDialog } from "@/components/ProjectGenerationDialog";
 export const ActiveProjects = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   
+  // Fetch all active projects count
+  const { data: totalCount } = useQuery({
+    queryKey: ['activeProjectsCount'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('project_instances')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'active');
+
+      if (error) throw error;
+      return count || 0;
+    }
+  });
+
   // Fetch active projects and their tasks
   const { data: projects, isLoading } = useQuery({
     queryKey: ['activeProjects'],
@@ -61,7 +75,12 @@ export const ActiveProjects = () => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-xl font-bold">Active Projects</CardTitle>
+        <div className="flex items-center gap-4">
+          <CardTitle className="text-xl font-bold">Active Projects</CardTitle>
+          <span className="text-sm text-muted-foreground">
+            Showing {projects?.length || 0} of {totalCount || 0}
+          </span>
+        </div>
         <div className="flex items-center gap-2">
           <List className="h-5 w-5 text-primary" />
           <Button onClick={() => setDialogOpen(true)}>
