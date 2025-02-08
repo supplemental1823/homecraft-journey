@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ProjectGenerationDialog } from "@/components/ProjectGenerationDialog";
 import { useState } from "react";
-import { Plus } from "lucide-react";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -41,14 +40,8 @@ export const Header = () => {
           </Button>
         </div>
 
-        {/* Add Project Button and Auth Buttons */}
+        {/* Auth Buttons */}
         <div className="flex items-center gap-2">
-          {session && (
-            <Button onClick={() => setDialogOpen(true)}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Project
-            </Button>
-          )}
           {!session && (
             <>
               <Button

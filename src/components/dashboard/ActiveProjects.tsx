@@ -3,9 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { List } from "lucide-react";
+import { List, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { ProjectGenerationDialog } from "@/components/ProjectGenerationDialog";
 
 export const ActiveProjects = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  
   // Fetch active projects and their tasks
   const { data: projects, isLoading } = useQuery({
     queryKey: ['activeProjects'],
@@ -56,7 +61,13 @@ export const ActiveProjects = () => {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-xl font-bold">Active Projects</CardTitle>
-        <List className="h-5 w-5 text-primary" />
+        <div className="flex items-center gap-2">
+          <List className="h-5 w-5 text-primary" />
+          <Button onClick={() => setDialogOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Project
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -77,6 +88,10 @@ export const ActiveProjects = () => {
           )}
         </div>
       </CardContent>
+      <ProjectGenerationDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </Card>
   );
 };
