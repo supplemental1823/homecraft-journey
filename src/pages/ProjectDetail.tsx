@@ -4,11 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Clock } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data: project, isLoading } = useQuery({
+  const { data: project, isLoading: isLoadingProject } = useQuery({
     queryKey: ["project", id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -22,7 +23,21 @@ const ProjectDetail = () => {
     },
   });
 
-  if (isLoading) {
+  const { data: tasks, isLoading: isLoadingTasks } = useQuery({
+    queryKey: ["template-tasks", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("template_tasks")
+        .select("*")
+        .eq("template_id", id)
+        .order("order_index", { ascending: true });
+
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  if (isLoadingProject || isLoadingTasks) {
     return <div className="p-8">Loading...</div>;
   }
 
@@ -63,9 +78,33 @@ const ProjectDetail = () => {
             )}
           </div>
         </div>
+
+        {/* Component B: Tasks Section */}
+        <div className="space-y-4 mt-8">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-semibold">Project Tasks</h2>
+            <span className="text-sm text-muted-foreground">
+              {tasks?.length || 0} tasks
+            </span>
+          </div>
+          <Progress value={0} className="h-2" />
+
+          {/* Task List */}
+          <div className="space-y-6 mt-6">
+            {tasks?.map((task) => (
+              <div key={task.id} className="space-y-2">
+                <h3 className="font-medium">{task.title}</h3>
+                {task.description && (
+                  <p className="text-sm text-muted-foreground">{task.description}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 export default ProjectDetail;
+

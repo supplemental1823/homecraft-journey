@@ -276,6 +276,44 @@ export type Database = {
         }
         Relationships: []
       }
+      template_tasks: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          order_index: number
+          template_id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order_index: number
+          template_id: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order_index?: number
+          template_id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "template_tasks_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "project_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       template_tools_and_materials: {
         Row: {
           created_at: string | null
