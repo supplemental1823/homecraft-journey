@@ -41,7 +41,6 @@ export const AllBlueprints = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-6">All Blueprints</h2>
       <div className="mb-8">
         <ProjectSearch
           onSearchChange={setSearch}
@@ -71,4 +70,4 @@ export const AllBlueprints = () => {
       </div>
     </div>
   );
-}
+};
