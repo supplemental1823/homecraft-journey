@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Explore from "./pages/Explore";
 import NotFound from "./pages/NotFound";
+import ProjectDetail from "./pages/ProjectDetail";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </TooltipProvider>

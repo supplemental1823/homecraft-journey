@@ -33,7 +33,9 @@ export function ProjectCard({
   const { session } = useAuth();
   const navigate = useNavigate();
 
-  const handleStartProject = async () => {
+  const handleStartProject = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click event from firing
+
     if (!session) {
       toast({
         title: "Authentication required",
@@ -82,8 +84,17 @@ export function ProjectCard({
     }
   };
 
+  const handleCardClick = () => {
+    if (templateId) {
+      navigate(`/project/${templateId}`);
+    }
+  };
+
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card 
+      className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" 
+      onClick={handleCardClick}
+    >
       <CardHeader className="space-y-1">
         <div className="flex justify-between items-start">
           <h3 className="text-xl font-semibold">{title}</h3>
