@@ -1,0 +1,4 @@
+
+project_id = "rmpgigxygxibwqbihvwi"
+[functions.generate-project]
+verify_jwt = true
