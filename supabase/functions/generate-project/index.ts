@@ -70,14 +70,22 @@ serve(async (req) => {
           {
             role: 'system',
             content: `You are a home improvement project generator. Generate a detailed project based on the user's prompt. 
-            Keep descriptions concise (50-75 words max). The response must be a valid JSON object with the following structure:
+            Keep descriptions concise (50-75 words max). Generate a sequential list of tasks (maximum 12) needed to complete the project.
+            Tasks should be ordered logically and represent clear, actionable steps. The response must be a valid JSON object with the following structure:
             {
               "name": "Project name (3-7 words)",
               "description": "Detailed but concise project description (50-75 words)",
               "tools_and_materials": ["item1", "item2", "item3"],
               "difficulty": "beginner" | "intermediate" | "advanced",
               "estimated_hours": number (1-48),
-              "category": "appliances" | "electrical" | "floors" | "general" | "home-safety" | "kitchen" | "outdoor" | "painting" | "plumbing" | "stairs" | "storage" | "windows-and-doors"
+              "category": "appliances" | "electrical" | "floors" | "general" | "home-safety" | "kitchen" | "outdoor" | "painting" | "plumbing" | "stairs" | "storage" | "windows-and-doors",
+              "tasks": [
+                {
+                  "title": "Clear, actionable task title",
+                  "description": "Detailed task description explaining what needs to be done",
+                  "order_index": number (starting from 1)
+                }
+              ]
             }`
           },
           {
@@ -98,10 +106,21 @@ serve(async (req) => {
     const projectData = JSON.parse(completion.choices[0].message.content);
 
     // Validate the response contains all required fields
-    const requiredFields = ['name', 'description', 'tools_and_materials', 'difficulty', 'estimated_hours', 'category'];
+    const requiredFields = ['name', 'description', 'tools_and_materials', 'difficulty', 'estimated_hours', 'category', 'tasks'];
     for (const field of requiredFields) {
       if (!projectData[field]) {
         throw new Error(`Missing required field: ${field}`);
+      }
+    }
+
+    // Validate tasks
+    if (!Array.isArray(projectData.tasks) || projectData.tasks.length === 0 || projectData.tasks.length > 12) {
+      throw new Error('Invalid tasks array: must contain between 1 and 12 tasks');
+    }
+
+    for (const task of projectData.tasks) {
+      if (!task.title || !task.description || !task.order_index) {
+        throw new Error('Invalid task: missing required fields');
       }
     }
 

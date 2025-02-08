@@ -66,6 +66,7 @@ export function ProjectGenerationDialog({
     
     setIsGenerating(true);
     try {
+      // Create project template
       const { data: template, error: templateError } = await supabase
         .from('project_templates')
         .insert({
@@ -83,7 +84,8 @@ export function ProjectGenerationDialog({
 
       if (templateError) throw templateError;
 
-      const { error: instanceError } = await supabase
+      // Create project instance
+      const { data: instance, error: instanceError } = await supabase
         .from('project_instances')
         .insert({
           template_id: template.id,
@@ -91,9 +93,38 @@ export function ProjectGenerationDialog({
           title: generatedProject.name,
           description: generatedProject.description,
           status: 'active'
-        });
+        })
+        .select()
+        .single();
 
       if (instanceError) throw instanceError;
+
+      // Create template tasks
+      const templateTaskPromises = generatedProject.tasks.map(async (task) => {
+        const { data: templateTask } = await supabase
+          .from('template_tasks')
+          .insert({
+            template_id: template.id,
+            title: task.title,
+            description: task.description,
+            order_index: task.order_index
+          })
+          .select()
+          .single();
+
+        if (templateTask) {
+          // Create corresponding user instance task
+          await supabase
+            .from('user_instance_tasks')
+            .insert({
+              instance_id: instance.id,
+              title: task.title,
+              description: task.description,
+              order_index: task.order_index,
+              completed: false
+            });
+        }
+      });
 
       // Create tool entries
       const toolPromises = generatedProject.tools_and_materials.map(async (item: string) => {
@@ -118,7 +149,8 @@ export function ProjectGenerationDialog({
         }
       });
 
-      await Promise.all(toolPromises);
+      // Wait for all promises to resolve
+      await Promise.all([...templateTaskPromises, ...toolPromises]);
 
       // Invalidate the active projects query to refresh the list
       queryClient.invalidateQueries({ queryKey: ['activeProjects'] });

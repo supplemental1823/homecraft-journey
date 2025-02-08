@@ -6,4 +6,9 @@ export interface GeneratedProject {
   difficulty: "beginner" | "intermediate" | "advanced";
   estimated_hours: number;
   category: string;
+  tasks: {
+    title: string;
+    description: string;
+    order_index: number;
+  }[];
 }
