@@ -1,14 +1,13 @@
 
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Clock, FileCheck, LayoutTemplate } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { Progress } from "@/components/ui/progress";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { ProjectHeader } from "./project-card/ProjectHeader";
+import { ProjectProgress } from "./project-card/ProjectProgress";
+import { ProjectActions } from "./project-card/ProjectActions";
 
 interface ProjectCardProps {
   title: string;
@@ -32,7 +31,6 @@ export function ProjectCard({
   templateId,
   instanceId,
   progress = 0,
-  imageUrl,
   status = 'active',
 }: ProjectCardProps) {
   const { toast } = useToast();
@@ -139,10 +137,9 @@ export function ProjectCard({
     toggleProjectStatus.mutate();
   };
 
-  const difficultyVariant = 
-    difficulty === "beginner" ? "default" : 
-    difficulty === "intermediate" ? "secondary" : 
-    "destructive";
+  // Calculate task counts
+  const totalTasks = 10; // This should come from your data
+  const completedTasks = Math.round((progress || 0) / 10);
 
   return (
     <Card 
@@ -151,34 +148,13 @@ export function ProjectCard({
       }`}
       onClick={handleCardClick}
     >
-      <CardHeader className="space-y-1">
-        <div className="flex justify-between items-start">
-          <div className="flex items-center gap-2">
-            {instanceId ? (
-              <FileCheck className="h-5 w-5 text-blue-500" />
-            ) : (
-              <LayoutTemplate className="h-5 w-5 text-gray-500" />
-            )}
-            <h3 className="text-xl font-semibold">{title}</h3>
-          </div>
-          {estimatedHours && (
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Clock className="w-4 h-4 mr-1" />
-              {estimatedHours}h
-            </div>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          {category && (
-            <Badge variant="outline">
-              {category}
-            </Badge>
-          )}
-          <Badge variant={difficultyVariant}>
-            {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-          </Badge>
-        </div>
-      </CardHeader>
+      <ProjectHeader
+        title={title}
+        difficulty={difficulty}
+        category={category}
+        estimatedHours={estimatedHours}
+        instanceId={instanceId}
+      />
       <CardContent>
         <p className="text-muted-foreground">
           {description.length > 100
@@ -186,32 +162,20 @@ export function ProjectCard({
             : description}
         </p>
         {instanceId && (
-          <div className="mt-4">
-            <Progress value={progress} className="h-2" />
-            <p className="text-sm text-muted-foreground mt-1">
-              {Math.round((progress || 0) / 10)}/{10} Tasks Complete
-            </p>
-          </div>
+          <ProjectProgress
+            progress={progress || 0}
+            totalTasks={totalTasks}
+            completedTasks={completedTasks}
+          />
         )}
       </CardContent>
-      <CardFooter>
-        {instanceId ? (
-          <Button 
-            className="w-full"
-            onClick={handleStatusToggle}
-            disabled={toggleProjectStatus.isPending}
-          >
-            {status === 'active' ? 'Complete' : 'Make Active'}
-          </Button>
-        ) : (
-          <Button 
-            className="w-full"
-            onClick={handleStartProject}
-          >
-            Start Project
-          </Button>
-        )}
-      </CardFooter>
+      <ProjectActions
+        instanceId={instanceId}
+        status={status}
+        onStart={handleStartProject}
+        onStatusToggle={handleStatusToggle}
+        isStatusUpdating={toggleProjectStatus.isPending}
+      />
     </Card>
   );
 }
