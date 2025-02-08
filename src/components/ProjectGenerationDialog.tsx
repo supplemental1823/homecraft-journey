@@ -33,6 +33,11 @@ interface GeneratedProject {
   category: string;
 }
 
+const capitalizeFirstLetter = (str: string) => {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export function ProjectGenerationDialog({
   open,
   onOpenChange,
@@ -207,7 +212,7 @@ export function ProjectGenerationDialog({
                         : "destructive"
                     }
                   >
-                    {generatedProject.difficulty.charAt(0).toUpperCase() + generatedProject.difficulty.slice(1)}
+                    {capitalizeFirstLetter(generatedProject.difficulty)}
                   </Badge>
                 </div>
 
