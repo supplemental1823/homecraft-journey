@@ -25,7 +25,14 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt } = await req.json();
+    const { prompt, userId } = await req.json();
+    
+    if (!userId) {
+      return new Response(
+        JSON.stringify({ error: 'User ID is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
     // Check rate limit
     const supabase = createClient(
@@ -39,6 +46,7 @@ serve(async (req) => {
     const { count } = await supabase
       .from('project_templates')
       .select('id', { count: 'exact' })
+      .eq('created_by', userId)
       .eq('visibility', 'private')
       .gte('created_at', new Date(windowStart * 1000).toISOString());
 

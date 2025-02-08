@@ -211,6 +211,7 @@ export type Database = {
         Row: {
           category: string | null
           created_at: string | null
+          created_by: string | null
           description: string | null
           difficulty: Database["public"]["Enums"]["difficulty_level"]
           estimated_hours: number | null
@@ -224,6 +225,7 @@ export type Database = {
         Insert: {
           category?: string | null
           created_at?: string | null
+          created_by?: string | null
           description?: string | null
           difficulty?: Database["public"]["Enums"]["difficulty_level"]
           estimated_hours?: number | null
@@ -237,6 +239,7 @@ export type Database = {
         Update: {
           category?: string | null
           created_at?: string | null
+          created_by?: string | null
           description?: string | null
           difficulty?: Database["public"]["Enums"]["difficulty_level"]
           estimated_hours?: number | null

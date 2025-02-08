@@ -75,7 +75,8 @@ export function ProjectGenerationDialog({
           estimated_hours: generatedProject.estimated_hours,
           category: generatedProject.category,
           visibility: 'private',
-          status: 'published'
+          status: 'published',
+          created_by: session.user.id
         })
         .select()
         .single();
