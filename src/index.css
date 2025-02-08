@@ -6,24 +6,24 @@
 @layer base {
   :root {
     --background: 0 0% 96%;
-    --foreground: 222 47% 11%;
+    --foreground: 222.2 47.4% 11.2%;
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 222.2 47.4% 11.2%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 222 47% 33%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+    --primary: 199 84% 55%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 217 91% 60%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 35 92% 50%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 199 84% 55%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222 47% 33%;
+    --ring: 199 84% 55%;
     --radius: 0.75rem;
   }
  
@@ -49,3 +49,4 @@
     @apply animate-fade-in;
   }
 }
+

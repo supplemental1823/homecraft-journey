@@ -58,10 +58,10 @@ export default {
         },
         // Custom brand colors direct hex values for direct usage
         brand: {
-          primary: '#1E3A8A',    // Deep Blue
-          secondary: '#3B82F6',  // Bright Blue
-          accent: '#F59E0B',     // Gold/Orange
-          background: '#F3F4F6', // Light Gray
+          primary: '#1EAEDB',    // Equivalent to HSL(199, 84%, 55%)
+          secondary: '#1E3A8A',  // Equivalent to HSL(222.2, 47.4%, 11.2%)
+          accent: '#F59E0B',     // Keep existing accent color
+          background: '#F3F4F6', // Keep existing background color
         },
       },
       borderRadius: {
@@ -97,3 +97,4 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
