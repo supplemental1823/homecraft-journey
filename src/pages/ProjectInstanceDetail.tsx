@@ -60,7 +60,7 @@ const ProjectInstanceDetail = () => {
     return <div className="p-8">Project not found</div>;
   }
 
-  const isTemplate = window.location.pathname.includes('/template/');
+  const isTemplate = !window.location.pathname.includes('/instance/');
 
   return (
     <div className="min-h-screen bg-background p-6">
